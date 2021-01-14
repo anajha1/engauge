@@ -1,91 +1,46 @@
 <!-- https://dev.to/dalalrohit/live-stream-your-webcam-to-html-page-3ehf -->
+
 <!DOCTYPE html>
 <html>
-  <video id="myVidPlayer" controls muted autoplay></video>
-  <button onclick="snapshot()">Snapshot</button>
 
-  <div class="mycanvas">
-    <h6>Snapshot</h6>
-    <canvas id="snapshot-1"></canvas>
-    <canvas id="snapshot-2"></canvas>
-  </div>
+<head>
+	<title>Engauge</title>
 
-  <div>
-    <h4>Returned JSON</h4>
-    <p id="returned-data"></p>
-  </div>
-  <script
-    type="text/javascript"
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"
-  ></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script type="text/javascript">
-    var canvas = document.getElementById("snapshot-1");
-    var context = canvas.getContext("2d");
+	<link rel="stylesheet" href="style.css">
 
-    // var canvas2 = document.getElementById("snapshot-2")
-    // var context2 = canvas2.getContext("2d")
+</head>
 
-    const video = document.querySelector("#myVidPlayer");
+<body>
+	<center>
+		<h1>Engauge</h1>
+	</center>
+	<center>
+		<video id="myVidPlayer" controls muted autoplay></video>
+	</center>
+	<center>
+		<button onclick="snapshot()" class = "bttn">Snapshot</button>
+  <br></br>
+    <div class="mycanvas">
+        <h6>Snapshot</h6>
+        <canvas id="snapshot-1"></canvas>
+        <!-- <canvas id="snapshot-2"></canvas> -->
+    </div>
+  </center>
+  <br></br>
+  <center>
+    <div>
+      <h4>Returned JSON</h4>
+      <p id="returned-data"></p>
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 
-    var w, h;
-    canvas.style.display = "none";
-    // canvas2.style.display = "none"
+      <script src="script.js">
+        
+    </script>
+    </center>
 
-    function snapshot() {
-      context.fillRect(0, 0, w, h);
-      context.drawImage(video, 0, 0, w, h);
-      canvas.style.display = "block";
-      var dataURL = canvas.toDataURL(); // converts snapshot to base64
-
-      // preparing to make post request to custom vision model
-      var myHeaders = new Headers();
-      myHeaders.append("Prediction-Key", "7a5b384c2a3041f2a998bf8d0f68a85a");
-      myHeaders.append("Content-Body", "application/json");
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        Url:
-          "https://github.com/ana-jha-19/cisco/blob/main/WIN_20210112_21_17_58_Pro.jpg?raw=true",
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      // make post request to custom vision model
-      fetch(
-        "https://engauge.cognitiveservices.azure.com/customvision/v3.0/Prediction/b2f0ff86-4d04-43b3-a17b-91223e124ea6/classify/iterations/Iteration1/url",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => {
-          // display results on webpage and console
-          console.log(result);
-          document.getElementById("returned-data").innerHTML = result;
-        })
-        .catch((error) => console.log("error", error));
-    }
-
-    window.navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        video.srcObject = stream;
-        video.onloadedmetadata = (e) => {
-          video.play();
-
-          w = video.videoWidth;
-          h = video.videoHeight;
-
-          canvas.width = w;
-          canvas.height = h;
-        };
-      })
-      .catch((error) => {
-        alert("You have to enable the mike and the camera");
-      });
-  </script>
+  </body>
 </html>
